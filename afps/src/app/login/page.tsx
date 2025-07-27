@@ -1,26 +1,33 @@
 'use client';
 import { useState } from 'react';
 import axios from 'axios';
-
-
+import { useRouter } from 'next/navigation';
 
 
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [mensagem, setMensagem] = useState('');
+    const router = useRouter();
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('http://localhost:5062/api/Auth/login', {
-                email,
-                password,
-            });
+            const response = await axios.post(
+                'http://localhost:5062/api/Auth/login',
+                {
+                    email,
+                    password,
+                },
+                {
+                    withCredentials: true,
+                }
+            );
 
             setMensagem('Login realizado com sucesso!');
             console.log(response);
+            router.push("/lobby")
         } catch (error) {
             setMensagem('Erro ao fazer login. Verifique suas credenciais.');
             console.error(error);
